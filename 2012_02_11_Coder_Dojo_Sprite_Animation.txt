@@ -1,0 +1,388 @@
+
+Coder Dojo
+
+2012-02-11
+
+HTML5 - Javascript
+
+Sprite Animation
+
+Lost and found
+
+We have a number of items in lost and found
+
+
+
+
+Pens/Pencils/Paper not collected for a month will be used for the idea jar.
+
+ 
+
+Technology not collected for a month will be used in projects.
+
+Worryingly, there is a pair of uncollected glasses for almost a month now...
+
+
+
+
+Interesting stuff this week
+
+Paul Bakaus of Zynga Germany is converting their existing games to HTML5.
+
+
+
+
+"I believe that the tech is ready to build those games. I think that the tech is not yet ready to build great 3D games since it's just about browser share penetration. But for 2D games and isometric games, it's the right time."
+
+ 
+
+source - http://blog.games.com/2012/02/02/zynga-germany-html5-paul-bakaus/ 
+
+Paul Bakaus
+
+And above all...
+
+be cool
+
+Thank you to ..    
+
+Val Head 
+
+@VLH from whom I stole so many ideas
+
+http://creativejs.com/2012/01/day-11-sprite-sheets/ 
+
+and
+
+Erica Gorman (wave please)
+
+for putting together the artwork
+
+To begin... get the sprite sheet
+
+http://GitHub.com/WillKnott
+
+
+
+
+Its in the repository
+
+CoderDojo-HTML5-CanvasSpriteAnimationtake the cdsprite.png file 
+
+Fire up your editors...
+
+Apple - Text Wrangler
+
+Windows - Notepad ++
+
+Linux - Komodo Edit
+
+ 
+
+There is a reason... file handling
+
+Lets start with a standard template
+
+«!doctype html»
+
+«html»
+
+    «head»
+
+        «meta charset="utf-8"»
+
+    «/head»
+
+    «body»
+
+        «script src=sani.js»
+
+        «/script»
+
+    «/body»
+
+«/html»
+
+And...
+
+move the downloaded image to the same place as the html file
+
+sami.js init part 1
+
+// screen size variables
+        var SCREEN_WIDTH = window.innerWidth,
+        SCREEN_HEIGHT = window.innerHeight;        
+         
+        var canvas = document.createElement('canvas');
+        var c = canvas.getContext('2d');
+          
+        canvas.width = SCREEN_WIDTH;
+        canvas.height = SCREEN_HEIGHT;
+
+        // Add our drawing canvas
+        document.body.appendChild(canvas);
+
+  
+
+part 2
+
+      //load the image
+        image = new Image();
+        image.src = "cdsprite.png";
+        
+        c.drawImage(image,0,0,250,250,0,0,250,250);
+        
+
+To explain...    
+
+       var SCREEN_WIDTH = window.innerWidth,
+        SCREEN_HEIGHT = window.innerHeight;     
+
+ 
+
+Figure out the size of the screen   
+         
+
+To explain
+
+
+        var canvas = document.createElement('canvas');
+        var c = canvas.getContext('2d');
+
+ 
+
+Set up the canvas on which we will draw our images
+          
+
+
+
+To explain
+
+        canvas.width = SCREEN_WIDTH;
+        canvas.height = SCREEN_HEIGHT;
+
+
+
+
+
+Set the canvas to be the size of the screen
+
+To explain
+
+
+        // Add our drawing canvas
+        document.body.appendChild(canvas);
+
+ 
+
+And put the canvas on the screen 
+
+To explain
+
+      //load the image
+        image = new Image();
+        image.src = "cdsprite.png";
+        
+ 
+
+Create an image object
+
+Explain Objects Will...      
+
+ 
+
+And define the src (source) part of the image object to be our sprite sheet 
+
+And the nasty one
+
+       c.drawImage(image,0,0,250,250,0,0,250,250);
+  
+
+
+
+
+Three parts.
+
+1) The Sprite Sheet image
+
+2) The part of the sheet we are copying from
+
+3) The location on the screen we are pasting to
+
+
+
+
+Of course, these numbers will have to change...
+
+And if its working
+
+You should be just displaying an image...
+
+So lets change a few things...
+
+// screen size variables
+        var SCREEN_WIDTH = window.innerWidth,
+        SCREEN_HEIGHT = window.innerHeight;        
+        var canvas = document.createElement('canvas');
+        var c = canvas.getContext('2d');
+          
+        canvas.width = SCREEN_WIDTH;
+        canvas.height = SCREEN_HEIGHT;
+
+        var initX = 0;
+        var initY = 0;
+        var xpos = initX;
+        var ypos = initY;
+        var index=0;
+        var numFrames = 30;
+        var frameSizeX= 253;
+        var frameSizeY= 280;
+
+no more numbers (except 0)
+
+       // Add our drawing canvas
+        document.body.appendChild(canvas);
+
+        //load the image
+        image = new Image();
+        image.src = "cdsprite.png";
+        
+        c.drawImage(image,
+
+xpos,ypos,frameSizeX,frameSizeY,
+
+0,0,frameSizeX, frameSizeY);
+        
+
+So now..
+
+We are displaying the same image, but we are using variables to do it.
+
+
+
+
+Variables change....
+
+make things move 1
+
+        // Add our drawing canvas
+        document.body.appendChild(canvas);
+
+        //load the image
+        image = new Image();
+        image.src = "cdsprite.png";
+        
+        image.onload = function() {
+        //The animation loop. Call loop so as 
+
+       //to complete the animation once a second
+            setInterval(loop, 1000 / numFrames);
+        }
+
+/This is the same timer that we used for the slideshow last time
+
+And make a loop
+
+        function loop() {
+            //clear the canvas!
+            c.clearRect(0,0, SCREEN_HEIGHT,SCREEN_WIDTH);
+                c.drawImage(image,xpos,ypos,frameSizeX,frameSizeY,0,0,frameSizeX, frameSizeY);
+            xpos += frameSizeX;
+            //increase the index so you know which frame of the animation comes next
+            index += 1;
+}            
+
+Why clear the canvas?
+
+Because sometimes...
+
+you can't overwrite cleanly
+
+
+
+
+So clean the sheet first.
+
+And now...
+
+The animation will run once...
+
+So when you reach the end
+
+Start again...
+
+
+
+
+       function loop() {
+            c.clearRect(0,0, SCREEN_HEIGHT,SCREEN_WIDTH);
+
+        c.drawImage(image,xpos,ypos,frameSizeX,frameSizeY,0,0,frameSizeX, frameSizeY);
+
+            xpos += frameSizeX;
+            index += 1;
+            
+            if (index »= numFrames) {
+                xpos = initX;
+                ypos = initY;
+                index=0;
+            }
+            
+
+So now...
+
+You have an animation loop
+
+Why is this important?
+
+http://www.widgetworx.com/
+
+ 
+
+Free to use sprite sheets for use in games
+
+Now you know..
+
+How to animate more
+
+To do    
+
+Make your own sheets
+
+Take the WidgetWorx ones
+
+
+
+
+Make your own animations...
+
+You don't have to ask for permission
+
+http://www.gamesbrief.com/2012/02/time-to-stop-asking-for-permission/
+
+
+
+
+You don't need to ask for permission to make a game.
+
+You don't need to ask for a publisher anymore
+
+You don't need to make a huge €60 game
+
+
+
+
+Here you've learned
+
+How to make a single building block
+
+You can put those block together according to someone else's instructions
+
+Or you can take those blocks
+
+And do something else
+
+Above all
+
+Go be cool
+
